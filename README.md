@@ -1,5 +1,7 @@
 # UPI QR Code Generator
 
+# live https://karankaran00.github.io/1999/
+
 A single-file, client-side tool that turns one payment amount into as many UPI QR
 codes as needed, capped at ₹1,999 each.
 
