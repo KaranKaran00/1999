@@ -1,7 +1,7 @@
 (function(){
   "use strict";
 
-  var MAX_PAISE = 199900;   /* ₹1,999.00 per QR */
+  var MAX_PAISE = 199900;
   var MAX_QRS   = 200;
   var payments  = [];
   var meta      = null;
@@ -9,7 +9,7 @@
   function $(id){ return document.getElementById(id); }
 
   var ICON_OK  = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
-  var ICON_BAD = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.01"/></svg>';
+  var ICON_BAD = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M16 8l-8 8"/></svg>';
 
   function toast(msg, kind){
     var t = $("toast");
@@ -21,7 +21,6 @@
     toast._t = setTimeout(function(){ t.hidden = true; }, 3400);
   }
 
-  /* ---------- money ---------- */
   function rupees(paise){
     var whole = Math.floor(paise / 100), frac = paise % 100;
     var s = whole.toLocaleString("en-IN");
@@ -31,7 +30,6 @@
   function inrHTML(paise){ return '<span class="rupee">\u20B9</span>' + rupees(paise); }
   function plainAmount(paise){ return (paise / 100).toFixed(2); }
 
-  /* ---------- splitting ---------- */
   function split(totalPaise){
     var out = [], remaining = totalPaise;
     while (remaining > 0){
@@ -51,7 +49,6 @@
     return q;
   }
 
-  /* ---------- QR ---------- */
   function qrCanvas(text, targetPx){
     var qr = qrcode(0, "M");
     qr.addData(text);
@@ -118,7 +115,6 @@
   function canvasToBlob(c){ return new Promise(function(res){ c.toBlob(res, "image/png"); }); }
   function fileNameFor(p){ return "UPI-QR-Payment-" + p.index + "-" + rupees(p.paise).replace(/,/g, "") + ".png"; }
 
-  /* ---------- saving ---------- */
   var dlCap;
   function downloadsCap(){
     if (!dlCap){
@@ -152,7 +148,6 @@
     });
   }
 
-  /* ---------- validation ---------- */
   var UPI_RE = /^[a-zA-Z0-9][a-zA-Z0-9.\-_]{1,255}@[a-zA-Z][a-zA-Z0-9.\-_]{1,63}$/;
 
   function setErr(id, msg){
@@ -202,7 +197,6 @@
     return ok ? { upiId: upiId, payee: payee, note: note, totalPaise: amt.paise } : null;
   }
 
-  /* ---------- live split preview ---------- */
   function renderSplit(){
     var box = $("split");
     var amt = parsePaise($("amount").value);
@@ -219,7 +213,7 @@
 
     var chips = "";
     if (full){
-      chips += '<span class="chip">' + inr(MAX_PAISE) + (full > 1 ? " \u00D7 " + full : "") + "</span>";
+      chips += '<span class="chip">' + inr(MAX_PAISE) + (full > 1 ? " × " + full : "") + "</span>";
     }
     if (rest){
       chips += '<span class="chip rest">' + inr(rest) + "</span>";
@@ -231,9 +225,8 @@
       '<div class="chips">' + chips + "</div>";
   }
 
-  /* ---------- stubs ---------- */
   function esc(s){
-    return String(s).replace(/[&<>"']/g, function(ch){
+    return String(s).replace(/[&<>\"']/g, function(ch){
       return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[ch];
     });
   }
@@ -279,7 +272,7 @@
     var dl = document.createElement("button");
     dl.className = "btn btn-secondary btn-sm";
     dl.type = "button";
-    dl.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M4 20h16"/></svg>Download QR';
+    dl.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5"/></svg>Download';
     dl.addEventListener("click", function(){
       canvasToBlob(sheetCanvas(p)).then(function(b){ saveFile(fileNameFor(p), b); });
     });
@@ -290,7 +283,7 @@
     cp.type = "button";
     cp.title = "Copy the UPI payment link";
     cp.setAttribute("aria-label", "Copy the UPI payment link for payment " + p.index);
-    cp.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    cp.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
     cp.addEventListener("click", function(){
       var done = function(){ toast("Payment link copied"); };
       if (navigator.clipboard && navigator.clipboard.writeText){
@@ -309,7 +302,6 @@
     return card;
   }
 
-  /* ---------- actions ---------- */
   function generate(){
     var form = readForm();
     if (!form){ toast("Fix the highlighted fields and try again.", "bad"); return; }
@@ -344,7 +336,6 @@
     $("upiId").focus();
   }
 
-  /* ---------- PDF ---------- */
   function buildPdf(){
     var Ctor = window.jspdf && window.jspdf.jsPDF;
     if (!Ctor){ toast("The PDF library didn't load. Reload the page.", "bad"); return; }
@@ -396,12 +387,11 @@
     saveFile("UPI-QR-Codes-" + rupees(meta.totalPaise).replace(/,/g, "") + "-" + payments.length + "x.pdf", doc.output("blob"));
   }
 
-  /* ---------- ZIP ---------- */
   function buildZip(){
     if (!window.JSZip){ toast("The ZIP library didn't load. Reload the page.", "bad"); return; }
     var zip = new window.JSZip();
     var btn = $("dlZip"), label = btn.innerHTML;
-    btn.disabled = true; btn.textContent = "Packing\u2026";
+    btn.disabled = true; btn.textContent = "Packing…";
 
     Promise.all(payments.map(function(p){
       return canvasToBlob(sheetCanvas(p)).then(function(b){ zip.file(fileNameFor(p), b); });
@@ -412,7 +402,6 @@
     .then(function(){ btn.disabled = false; btn.innerHTML = label; });
   }
 
-  /* ---------- wiring ---------- */
   $("generate").addEventListener("click", generate);
   $("clear").addEventListener("click", clearAll);
   $("dlPdf").addEventListener("click", buildPdf);

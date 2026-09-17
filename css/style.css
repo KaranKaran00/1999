@@ -1,6 +1,4 @@
-/* ============================================================
-   LAYER 1 — PRIMITIVES
-   ============================================================ */
+
 :root{
   --slate-950:#080D14; --slate-900:#0D141D; --slate-850:#131C26; --slate-800:#1B2733;
   --slate-700:#2A3947; --slate-600:#3D4F61; --slate-500:#5B6E82; --slate-400:#7D8FA3;
@@ -26,9 +24,6 @@
   --dur:170ms;
 }
 
-/* ============================================================
-   LAYER 2 — SEMANTIC (light)
-   ============================================================ */
 :root{
   --bg-canvas:var(--slate-50);
   --bg-surface:var(--white);
@@ -57,9 +52,6 @@
   --shadow-card:var(--shadow-md);
 }
 
-/* ============================================================
-   LAYER 2 — SEMANTIC (dark)
-   ============================================================ */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg-canvas:var(--slate-950);
@@ -109,22 +101,16 @@
   --shadow-card:0 1px 2px rgba(0,0,0,.4);
 }
 
-/* ============================================================
-   LAYER 3 — COMPONENT TOKENS
-   ============================================================ */
 :root{
   --topbar-h:60px;
   --panel-w:390px;
-  --control-h:44px;            /* P2: 44px minimum touch target */
+  --control-h:44px;
   --field-bg:var(--bg-raised);
   --field-border:var(--border-default);
   --btn-radius:var(--r-md);
   --card-radius:var(--r-lg);
 }
 
-/* ============================================================
-   BASE
-   ============================================================ */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
@@ -142,9 +128,6 @@ svg{display:block;flex:none}
 :focus-visible{outline:2px solid var(--ring);outline-offset:2px;border-radius:3px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 
-/* ============================================================
-   TOP BAR
-   ============================================================ */
 .topbar{
   height:var(--topbar-h);
   display:flex;align-items:center;gap:var(--s-3);
@@ -178,9 +161,6 @@ svg{display:block;flex:none}
 }
 .icon-btn:hover{background:var(--bg-inset);color:var(--fg-primary)}
 
-/* ============================================================
-   SHELL
-   ============================================================ */
 .shell{
   display:grid;
   grid-template-columns:var(--panel-w) minmax(0,1fr);
@@ -191,9 +171,6 @@ svg{display:block;flex:none}
 }
 @media (max-width:1023px){.shell{grid-template-columns:minmax(0,1fr)}}
 
-/* ============================================================
-   PANEL (config column)
-   ============================================================ */
 .panel{
   background:var(--bg-surface);
   border:1px solid var(--border-subtle);
@@ -233,7 +210,6 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
 }
 .err:empty{min-height:0;margin-top:0}
 
-/* live split preview */
 .split{
   border:1px dashed var(--border-default);border-radius:var(--r-md);
   padding:var(--s-3) var(--s-4);background:var(--bg-raised);
@@ -263,9 +239,6 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
 }
 .privacy svg{margin-top:2px;color:var(--fg-muted)}
 
-/* ============================================================
-   BUTTONS
-   ============================================================ */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
   min-height:var(--control-h);padding:0 16px;
@@ -284,9 +257,6 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .btn[disabled]:hover{background:inherit}
 
-/* ============================================================
-   OUTPUT COLUMN
-   ============================================================ */
 .output{min-width:0}
 
 .empty{
@@ -326,7 +296,6 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
   grid-template-columns:repeat(auto-fill,minmax(258px,1fr));
 }
 
-/* ---- payment stub ---- */
 .stub{
   background:var(--bg-surface);
   border:1px solid var(--border-subtle);
@@ -380,9 +349,6 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
 .stub-foot .btn{flex:1}
 .stub-foot .icon-only{flex:none;width:38px;padding:0}
 
-/* ============================================================
-   TOAST
-   ============================================================ */
 .toast{
   position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
   display:flex;align-items:center;gap:8px;
@@ -403,9 +369,6 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
   @keyframes rise{from{opacity:0;transform:translateX(-50%) translateY(8px)}}
 }
 
-/* ============================================================
-   PRINT
-   ============================================================ */
 @media print{
   @page{margin:12mm}
   body{background:#fff;color:#000;font-size:10pt}
@@ -421,3 +384,4 @@ input[aria-invalid="true"]{border-color:var(--border-danger)}
   .amt{font-size:14pt}
   .meta{font-size:8pt}
 }
+
